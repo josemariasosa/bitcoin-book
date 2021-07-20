@@ -176,5 +176,7 @@ El consenso del protocolo
 Lightning network y el futuro.
 
 
+Instalación de un nodo de bitcoin core: [bitcoin-node-install](bitcoin-node-install.md)
+
 
 
