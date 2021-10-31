@@ -1,5 +1,20 @@
 # Instalar un Nodo de Bitcoin Core
 
+## Steps
+
+https://stopanddecrypt.medium.com/running-bitcoin-lightning-nodes-over-the-tor-network-2021-edition-489180297d5
+
+
+## Raspberrypi and Umbrel
+
+```sh
+ping raspberrypi.local
+
+ssh umbrel@192.168.1.68
+ssh umbrel@umbrel.local
+docker exec bitcoin bitcoin-cli getblockcount
+```
+
 ## Instalar una máquina virtual usando VirtualBox
 
 https://hibbard.eu/install-ubuntu-virtual-box/
@@ -37,10 +52,10 @@ Para tomar el control del servidor desde tu terminal:
 
 ```sh
 # Mainnet
-ssh jomsox@192.168.0.150
+ssh jomsox@192.168.0.185
 
 # Testnet
-ssh jomsox@192.168.0.175
+ssh jomsox@192.168.0.
 
 ```
 
@@ -65,6 +80,99 @@ tmpfs                              786M  1.2M  785M   1% /run
 /dev/mapper/ubuntu--vg-ubuntu--lv  454G  3.8G  432G   1% /
 
 ```
+
+## Instalar TOR
+
+Obtener el `Linux Distribution Codename`:
+
+```sh
+lsb_release -c
+```
+
+Hay que añadir la distribución
+
+```sh
+sudo nano /etc/apt/sources.list.d/tor_repo.list
+
+# Añadir al archivo tor_repo.list:
+deb http://deb.torproject.org/torproject.org focal main
+deb-src http://deb.torproject.org/torproject.org focal main
+```
+
+Instalar TOR
+
+```sh
+sudo apt-get update
+sudo apt-get install tor deb.torproject.org-keyring
+```
+
+Configurar TOR para BTC y LN
+
+```sh
+sudo nano /etc/tor/torrc
+
+# Añadir las siguiente lineas hasta abajo
+SOCKSPort 9050
+Log notice stdout
+ControlPort 9051
+CookieAuthentication 1
+CookieAuthFileGroupReadable 1
+HiddenServiceDir /var/lib/tor/lnd/
+HiddenServicePort 8080 127.0.0.1:8080
+```
+
+```sh
+grep User /usr/share/tor/tor-service-defaults-torrc
+
+sudo usermod -a -G debian-tor jomsox
+```
+
+Hacer que Tor arranque con la máquina
+
+```sh
+sudo systemctl enable tor
+sudo systemctl start tor
+```
+
+
+Instala Git y demás dependencias:
+
+```sh
+sudo apt-get install git build-essential -y
+
+sudo apt-get install libtool autotools-dev automake pkg-config bsdmainutils python3 libssl-dev libevent-dev libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-test-dev libboost-thread-dev libminiupnpc-dev libzmq3-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler ccache -y
+
+```
+
+Clonar bitcoin
+
+```sh
+mkdir -p ~/code && cd ~/code
+
+git clone https://github.com/bitcoin/bitcoin.git
+```
+
+Instalar Install Berkley DB v4.8
+
+```sh
+cd bitcoin/contrib/ && ./install_db4.sh `pwd`
+```
+
+```sh
+git tag -n | sort -V
+git checkout v0.21.1
+```
+
+```sh
+./autogen.sh
+export BDB_PREFIX='/home/jomsox/code/bitcoin/contrib/db4'
+./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include"
+make  # build bitcoin core
+make check && sudo make install
+```
+
+
+
 
 Usar el servidor como administrador:
 
@@ -99,14 +207,7 @@ root@jomsox:/# ls -l | grep standup
 
 ## Compilar Bitcoin desde el Código Fuente
 
-Instala Git y demás dependencias:
 
-```sh
-sudo apt-get install git build-essential -y
-
-sudo apt-get install libtool autotools-dev automake pkg-config bsdmainutils python3 libssl-dev libevent-dev libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-test-dev libboost-thread-dev libminiupnpc-dev libzmq3-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler ccache -y
-
-```
 
 Para clonar la última versión del código de bitcoin core:
 
@@ -142,3 +243,7 @@ export BDB_PREFIX='/root/bitcoin/contrib/db4'
 ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include"
 make  # build bitcoin core
 ```
+
+
+$ make check will run Unit Tests, which should all return PASS.
+$ test/functional/test_runner.py --extended will run extended functional tests. Omit --extended flag if you want to skip a few
