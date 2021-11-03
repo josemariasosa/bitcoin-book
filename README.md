@@ -1,4 +1,31 @@
-# Bitcoin
+# Linux, Bitcoin y las DAO
+
+Hay una revolución que se está llevando a cabo en estos momentos. Lento al 
+inicio y luego de manera precipitada, estamos presenciando una transición a un
+mundo complétamente automatizado y digital.
+
+Las herramientas que el hombre una vez diseñó con el fin de ayudarlo a resolver
+una tarea en específico, lentamente nos ayudaron a construír no solo mundos
+físicos, con muros y ladrillos de verdad, dio paso también a la fabricación de
+sistemas que le facilitaban la vida, como el correo electónico y las compras
+por Internet.
+
+El código abierto permitió el incremento en la complejidad de los sistemas,
+pues las herramientas de software estaban disponible para que cualquiera
+pudiera descargarlo y hacer uso del mismo.
+
+Projectos como Linux demuestran la capacidad y resiliencia de un sistema
+operativo, que funciona sin la representación de un ente privado. El código
+de Linux es abierto y está disponible para que cualquier persona sin solicitar
+el permiso de nadie, pueda construír software capaz de comunicarse con el
+software de alguien más.
+
+Esta proliferación permite la aceleración en el desarrollo de nuevas herramientas
+capaces de integrarse. Generando una gran red de compatibilidad. Campos como
+la Inteligencia Artificial han sido beneficiados.
+
+Desde hace mucho
+
 
 My journey through bitcoin. Mi caminio hacia Bitcoin.
 
